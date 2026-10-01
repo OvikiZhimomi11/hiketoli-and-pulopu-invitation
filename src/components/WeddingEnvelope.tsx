@@ -6,7 +6,8 @@ interface WeddingEnvelopeProps {
 }
 
 // Default realistic church photo & stylized map graphic
-const DEFAULT_CHURCH_PHOTO = '/src/assets/images/satakha_church_real_photo_1790878984943.jpg';
+const DEFAULT_CHURCH_PHOTO = '/src/assets/images/satakha_church_night_1790879734351.jpg';
+const DAY_CHURCH_PHOTO = '/src/assets/images/satakha_church_real_photo_1790878984943.jpg';
 const STYLIZED_MAP_GRAPHIC = '/src/assets/images/stylized_wedding_venue_map_1790876897182.jpg';
 
 /**
