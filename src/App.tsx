@@ -1,7 +1,6 @@
 import React, { useState } from 'react';
 import confetti from 'canvas-confetti';
 import { WeddingEnvelope } from './components/WeddingEnvelope';
-import { PetalOverlay } from './components/PetalOverlay';
 
 export default function App() {
   const [isOpen, setIsOpen] = useState(false);
@@ -18,9 +17,6 @@ export default function App() {
 
   return (
     <div className="min-h-screen w-full bg-[#071d23] text-neutral-100 flex flex-col items-center justify-center relative overflow-y-auto selection:bg-amber-500/30 selection:text-amber-200 py-6 px-3 sm:px-6">
-      {/* Background Animation: Gold & White Floral Petals Falling */}
-      <PetalOverlay />
-
       {/* Ambient luxury lighting */}
       <div 
         className="fixed inset-0 pointer-events-none opacity-40 -z-10"
@@ -30,7 +26,7 @@ export default function App() {
       />
 
       {!isOpen ? (
-        /* Middle of the screen: "Open the card" */
+        /* Middle of the screen: Clean "Open the card" with zero falling elements */
         <div className="relative z-10 flex flex-col items-center justify-center text-center animate-fade-in my-auto">
           <button
             onClick={handleOpenCard}

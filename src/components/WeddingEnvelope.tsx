@@ -1,9 +1,13 @@
 import React, { useState, useEffect } from 'react';
-import { RotateCw, ArrowLeft, MapPin, ExternalLink, Navigation, X } from 'lucide-react';
+import { RotateCw, ArrowLeft, MapPin, ExternalLink, Navigation, X, Camera, Compass } from 'lucide-react';
 
 interface WeddingEnvelopeProps {
   onReset: () => void;
 }
+
+// Default realistic church photo & stylized map graphic
+const DEFAULT_CHURCH_PHOTO = '/src/assets/images/satakha_church_real_photo_1790878984943.jpg';
+const STYLIZED_MAP_GRAPHIC = '/src/assets/images/stylized_wedding_venue_map_1790876897182.jpg';
 
 /**
  * Elegant Countdown Timer to October 20, 2026, 10:00 A.M. using font-cinzel style
@@ -51,7 +55,6 @@ const WeddingCountdown: React.FC = () => {
 
   return (
     <div className="flex flex-col items-center my-0.5">
-      {/* Countdown Digits in font-cinzel */}
       <div className="flex items-center justify-center gap-2.5 sm:gap-3.5 font-cinzel select-none">
         {/* Days */}
         <div className="flex flex-col items-center">
@@ -106,9 +109,23 @@ const WeddingCountdown: React.FC = () => {
 export const WeddingEnvelope: React.FC<WeddingEnvelopeProps> = ({ onReset }) => {
   const [activeSide, setActiveSide] = useState<'inside' | 'cover' | 'map'>('inside');
   const [isMapModalOpen, setIsMapModalOpen] = useState(false);
+  const [churchImage, setChurchImage] = useState<string>(DEFAULT_CHURCH_PHOTO);
 
   const handleOpenMap = () => {
     setIsMapModalOpen(true);
+  };
+
+  const handleImageUpload = (e: React.ChangeEvent<HTMLInputElement>) => {
+    const file = e.target.files?.[0];
+    if (file) {
+      const reader = new FileReader();
+      reader.onload = (event) => {
+        if (event.target?.result) {
+          setChurchImage(event.target.result as string);
+        }
+      };
+      reader.readAsDataURL(file);
+    }
   };
 
   return (
@@ -144,7 +161,7 @@ export const WeddingEnvelope: React.FC<WeddingEnvelopeProps> = ({ onReset }) => 
             }`}
           >
             <MapPin className="w-3 h-3 text-amber-400" />
-            <span>Venue Map</span>
+            <span>Venue & Church</span>
           </button>
 
           <button
@@ -165,12 +182,17 @@ export const WeddingEnvelope: React.FC<WeddingEnvelopeProps> = ({ onReset }) => 
         <div className="w-full max-w-[410px] sm:max-w-[430px]">
           {activeSide === 'inside' && (
             <CardInside
+              churchImage={churchImage}
               onFlip={() => setActiveSide('cover')}
               onOpenMap={handleOpenMap}
             />
           )}
           {activeSide === 'map' && (
-            <CardVenueMap onBackToCard={() => setActiveSide('inside')} />
+            <CardVenueMap
+              churchImage={churchImage}
+              onBackToCard={() => setActiveSide('inside')}
+              onUploadCustomPhoto={handleImageUpload}
+            />
           )}
           {activeSide === 'cover' && (
             <CardCover onFlip={() => setActiveSide('inside')} />
@@ -194,28 +216,32 @@ export const WeddingEnvelope: React.FC<WeddingEnvelopeProps> = ({ onReset }) => 
               className="flex items-center gap-1 hover:text-amber-100 transition-colors cursor-pointer"
             >
               <MapPin className="w-3 h-3 text-amber-400" />
-              <span>View Stylized Venue Map</span>
+              <span>View Church Photo & Location</span>
             </button>
           )}
         </div>
       </div>
 
-      {/* Stylized Venue Map Modal (when map preview on card is tapped) */}
+      {/* Real Church & Location Modal */}
       {isMapModalOpen && (
-        <VenueMapModal onClose={() => setIsMapModalOpen(false)} />
+        <VenueMapModal
+          churchImage={churchImage}
+          onClose={() => setIsMapModalOpen(false)}
+        />
       )}
     </div>
   );
 };
 
 /**
- * PAGE 2: Exact Pixel-Faithful Wedding Card from User's Uploaded Image
- * Includes stylized map graphic section and countdown timer!
+ * PAGE 2: Exact Pixel-Faithful Wedding Card
+ * Displays the real photograph of Satakha Town Baptist Church!
  */
-const CardInside: React.FC<{ onFlip: () => void; onOpenMap: () => void }> = ({
-  onFlip,
-  onOpenMap,
-}) => {
+const CardInside: React.FC<{
+  churchImage: string;
+  onFlip: () => void;
+  onOpenMap: () => void;
+}> = ({ churchImage, onFlip, onOpenMap }) => {
   return (
     <div
       onClick={onFlip}
@@ -377,7 +403,7 @@ const CardInside: React.FC<{ onFlip: () => void; onOpenMap: () => void }> = ({
         </p>
       </div>
 
-      {/* SECTION 3: Date, Time, Venue, Countdown & Stylized Map Section */}
+      {/* SECTION 3: Date, Time, Venue, Countdown & Real Church Photo Section */}
       <div className="flex flex-col items-center w-full pb-1">
         {/* Month */}
         <span className="font-cormorant text-xs sm:text-[13px] text-[#142e47]">
@@ -421,29 +447,29 @@ const CardInside: React.FC<{ onFlip: () => void; onOpenMap: () => void }> = ({
         {/* Elegant Countdown Timer */}
         <WeddingCountdown />
 
-        {/* STYLIZED MAP GRAPHIC SECTION */}
+        {/* REAL GOOGLE / DOCUMENTARY CHURCH PICTURE SECTION */}
         <div
           onClick={(e) => {
             e.stopPropagation();
             onOpenMap();
           }}
-          className="w-full max-w-[260px] sm:max-w-[280px] my-1 rounded-lg overflow-hidden border border-[#c59b27]/50 shadow-sm relative group bg-[#fdfbf7] cursor-pointer hover:border-[#c59b27] transition-all"
-          title="Click to view full stylized venue map & directions"
+          className="w-full max-w-[260px] sm:max-w-[280px] my-1 rounded-lg overflow-hidden border border-[#c59b27]/60 shadow-sm relative group bg-[#fdfbf7] cursor-pointer hover:border-[#c59b27] transition-all"
+          title="Click to view real church photo & Google Maps location"
         >
           <div className="relative aspect-[16/6] w-full overflow-hidden">
             <img
-              src="/src/assets/images/stylized_wedding_venue_map_1790876897182.jpg"
-              alt="Stylized wedding venue map"
+              src={churchImage}
+              alt="Satakha Town Baptist Church exterior"
               className="w-full h-full object-cover object-center group-hover:scale-105 transition-transform duration-500"
             />
-            <div className="absolute inset-0 bg-gradient-to-t from-[#102a43]/85 via-[#102a43]/20 to-transparent pointer-events-none" />
+            <div className="absolute inset-0 bg-gradient-to-t from-[#102a43]/90 via-[#102a43]/25 to-transparent pointer-events-none" />
             <div className="absolute bottom-1 left-2 right-2 flex items-center justify-between text-white text-[9px] font-cinzel">
               <span className="flex items-center gap-1 font-semibold text-amber-200 drop-shadow">
                 <MapPin className="w-2.5 h-2.5 text-amber-400" />
                 Satakha, Nagaland
               </span>
               <span className="text-amber-200/90 text-[8px] tracking-wider uppercase flex items-center gap-0.5 underline">
-                <span>View Map</span>
+                <span>Location & Photos</span>
                 <ExternalLink className="w-2 h-2" />
               </span>
             </div>
@@ -478,9 +504,15 @@ const CardInside: React.FC<{ onFlip: () => void; onOpenMap: () => void }> = ({
 };
 
 /**
- * Dedicated Stylized Venue Map Card (Full View)
+ * Dedicated Venue Card: Real Church Picture & Stylized Route Map
  */
-const CardVenueMap: React.FC<{ onBackToCard: () => void }> = ({ onBackToCard }) => {
+const CardVenueMap: React.FC<{
+  churchImage: string;
+  onBackToCard: () => void;
+  onUploadCustomPhoto: (e: React.ChangeEvent<HTMLInputElement>) => void;
+}> = ({ churchImage, onBackToCard, onUploadCustomPhoto }) => {
+  const [viewTab, setViewTab] = useState<'photo' | 'map'>('photo');
+
   const handleOpenGoogleMaps = () => {
     window.open(
       'https://www.google.com/maps/search/?api=1&query=Satakha+Town+Baptist+Church+Nagaland',
@@ -489,9 +521,9 @@ const CardVenueMap: React.FC<{ onBackToCard: () => void }> = ({ onBackToCard }) 
   };
 
   return (
-    <div className="relative w-full aspect-[1/1.52] bg-white rounded-xl shadow-[0_20px_50px_rgba(0,0,0,0.55)] border border-neutral-200 p-5 sm:p-6 flex flex-col items-center justify-between text-center select-none animate-fade-in">
+    <div className="relative w-full aspect-[1/1.52] bg-white rounded-xl shadow-[0_20px_50px_rgba(0,0,0,0.55)] border border-neutral-200 p-4 sm:p-6 flex flex-col items-center justify-between text-center select-none animate-fade-in">
       {/* Top Header */}
-      <div className="flex flex-col items-center w-full pt-1">
+      <div className="flex flex-col items-center w-full pt-0.5">
         <span className="font-cinzel text-xs text-[#c59b27] tracking-[0.25em] uppercase font-semibold">
           Wedding Venue & Location
         </span>
@@ -501,28 +533,82 @@ const CardVenueMap: React.FC<{ onBackToCard: () => void }> = ({ onBackToCard }) 
         <p className="font-cormorant italic text-xs text-[#142e47]/80">
           Satakha, Zunheboto District, Nagaland
         </p>
-      </div>
 
-      {/* Main Stylized Map Graphic */}
-      <div className="relative w-full my-auto rounded-lg overflow-hidden border-2 border-[#c59b27]/60 shadow-md bg-[#faf8f2]">
-        <img
-          src="/src/assets/images/stylized_wedding_venue_map_1790876897182.jpg"
-          alt="Stylized wedding venue map graphic"
-          className="w-full aspect-[4/3] object-cover"
-        />
-        {/* Subtle Map Overlay with Location Badge */}
-        <div className="absolute top-2 left-2 bg-[#102a43]/85 backdrop-blur-xs px-2.5 py-1 rounded-full text-white text-[10px] font-cinzel flex items-center gap-1.5 shadow">
-          <MapPin className="w-3 h-3 text-amber-400" />
-          <span>Church Location</span>
+        {/* View Switcher: Church Photo vs Stylized Map */}
+        <div className="flex items-center gap-1 bg-slate-100 p-0.5 rounded-full mt-2 border border-slate-200">
+          <button
+            onClick={() => setViewTab('photo')}
+            className={`px-3 py-1 rounded-full text-xs font-cinzel transition-all cursor-pointer ${
+              viewTab === 'photo'
+                ? 'bg-[#142e47] text-amber-200 font-semibold shadow-xs'
+                : 'text-slate-600 hover:text-slate-900'
+            }`}
+          >
+            Church Photo 🏛️
+          </button>
+          <button
+            onClick={() => setViewTab('map')}
+            className={`px-3 py-1 rounded-full text-xs font-cinzel transition-all cursor-pointer ${
+              viewTab === 'map'
+                ? 'bg-[#142e47] text-amber-200 font-semibold shadow-xs'
+                : 'text-slate-600 hover:text-slate-900'
+            }`}
+          >
+            Route Map 🗺️
+          </button>
         </div>
       </div>
 
+      {/* Main Visual Display: Real Church Photo OR Stylized Map Graphic */}
+      <div className="relative w-full my-auto rounded-lg overflow-hidden border-2 border-[#c59b27]/60 shadow-md bg-[#faf8f2]">
+        {viewTab === 'photo' ? (
+          <div className="relative aspect-[16/10] w-full overflow-hidden group">
+            <img
+              src={churchImage}
+              alt="Satakha Town Baptist Church Real Photo"
+              className="w-full h-full object-cover group-hover:scale-102 transition-transform duration-500"
+            />
+            <div className="absolute bottom-2 left-2 bg-[#102a43]/90 text-white text-[10px] font-cinzel px-2.5 py-1 rounded-full flex items-center gap-1 shadow">
+              <MapPin className="w-3 h-3 text-amber-400" />
+              <span>Satakha Town Baptist Church</span>
+            </div>
+
+            {/* Custom Photo Upload trigger for host */}
+            <label
+              className="absolute top-2 right-2 bg-neutral-900/80 hover:bg-neutral-900 text-amber-200 text-[10px] font-cinzel px-2.5 py-1 rounded-full border border-amber-500/30 flex items-center gap-1 shadow cursor-pointer transition-colors"
+              title="Upload your own custom church photo"
+            >
+              <Camera className="w-3 h-3" />
+              <span>Change Photo</span>
+              <input
+                type="file"
+                accept="image/*"
+                onChange={onUploadCustomPhoto}
+                className="hidden"
+              />
+            </label>
+          </div>
+        ) : (
+          <div className="relative aspect-[16/10] w-full overflow-hidden">
+            <img
+              src={STYLIZED_MAP_GRAPHIC}
+              alt="Stylized wedding venue map graphic"
+              className="w-full h-full object-cover"
+            />
+            <div className="absolute top-2 left-2 bg-[#102a43]/85 backdrop-blur-xs px-2.5 py-1 rounded-full text-white text-[10px] font-cinzel flex items-center gap-1 shadow">
+              <Compass className="w-3 h-3 text-amber-400" />
+              <span>Satakha Route Guide</span>
+            </div>
+          </div>
+        )}
+      </div>
+
       {/* Location Details & Navigation Action */}
-      <div className="flex flex-col items-center w-full pb-1 space-y-2">
-        <p className="font-cormorant text-xs text-[#142e47] leading-relaxed max-w-xs">
+      <div className="flex flex-col items-center w-full pb-0.5 space-y-1.5">
+        <p className="font-cormorant text-xs text-[#142e47] leading-tight max-w-xs">
           Coordinates: <span className="font-semibold">26.0125° N, 94.4856° E</span>
           <br />
-          Ceremony starts promptly at <span className="font-semibold">10:00 A.M.</span> on Tuesday, October 20, 2026.
+          Ceremony begins at <span className="font-semibold">10:00 A.M.</span> on Tuesday, October 20, 2026.
         </p>
 
         {/* Google Maps Button */}
@@ -531,7 +617,7 @@ const CardVenueMap: React.FC<{ onBackToCard: () => void }> = ({ onBackToCard }) 
           className="w-full max-w-[240px] py-2 px-4 rounded-full bg-gradient-to-r from-[#e8c76b] via-[#f7e096] to-[#cf9c34] text-neutral-950 font-cinzel font-bold text-xs tracking-wider uppercase shadow-md hover:shadow-lg hover:scale-102 active:scale-98 transition-all flex items-center justify-center gap-2 border border-amber-200 cursor-pointer"
         >
           <Navigation className="w-3.5 h-3.5 fill-current" />
-          <span>Get Directions</span>
+          <span>Open in Google Maps</span>
           <ExternalLink className="w-3 h-3" />
         </button>
 
@@ -639,9 +725,12 @@ const CardCover: React.FC<{ onFlip: () => void }> = ({ onFlip }) => {
 };
 
 /**
- * Modal Popup for the Stylized Venue Map Graphic
+ * Modal Popup for Church Photo & Google Maps Location
  */
-const VenueMapModal: React.FC<{ onClose: () => void }> = ({ onClose }) => {
+const VenueMapModal: React.FC<{ churchImage: string; onClose: () => void }> = ({
+  churchImage,
+  onClose,
+}) => {
   const handleOpenGoogleMaps = () => {
     window.open(
       'https://www.google.com/maps/search/?api=1&query=Satakha+Town+Baptist+Church+Nagaland',
@@ -661,9 +750,9 @@ const VenueMapModal: React.FC<{ onClose: () => void }> = ({ onClose }) => {
         </button>
 
         {/* Header */}
-        <div className="text-center mb-3">
+        <div className="text-center mb-2.5">
           <span className="font-cinzel text-xs text-[#c59b27] font-semibold tracking-widest uppercase">
-            Wedding Venue Map
+            Wedding Venue Location
           </span>
           <h3 className="font-cormorant font-bold text-lg text-[#142e47]">
             Satakha Town Baptist Church
@@ -673,18 +762,24 @@ const VenueMapModal: React.FC<{ onClose: () => void }> = ({ onClose }) => {
           </p>
         </div>
 
-        {/* Stylized Map Graphic */}
-        <div className="relative w-full rounded-xl overflow-hidden border border-[#c59b27]/40 shadow-inner mb-4">
+        {/* Church Photo Display */}
+        <div className="relative w-full rounded-xl overflow-hidden border border-[#c59b27]/40 shadow-inner mb-3">
           <img
-            src="/src/assets/images/stylized_wedding_venue_map_1790876897182.jpg"
-            alt="Stylized wedding venue map"
-            className="w-full aspect-[4/3] object-cover"
+            src={churchImage}
+            alt="Satakha Town Baptist Church"
+            className="w-full aspect-[16/10] object-cover"
           />
           <div className="absolute bottom-2 left-2 bg-[#102a43]/90 text-white text-[10px] font-cinzel px-2.5 py-1 rounded-full flex items-center gap-1 shadow">
             <MapPin className="w-3 h-3 text-amber-400" />
-            <span>Church Location Pin</span>
+            <span>Satakha, Nagaland</span>
           </div>
         </div>
+
+        {/* Venue Information */}
+        <p className="font-cormorant text-xs text-center text-slate-700 mb-3 px-2">
+          Join us at Satakha Town Baptist Church on Tuesday, October 20, 2026 at 10:00 A.M.
+          View photos, directions, and satellite imagery on Google Maps below.
+        </p>
 
         {/* Action Button */}
         <button
@@ -692,7 +787,7 @@ const VenueMapModal: React.FC<{ onClose: () => void }> = ({ onClose }) => {
           className="w-full py-2.5 px-4 rounded-full bg-gradient-to-r from-[#e8c76b] via-[#f7e096] to-[#cf9c34] text-neutral-950 font-cinzel font-bold text-xs tracking-wider uppercase shadow-md hover:shadow-lg transition-all flex items-center justify-center gap-2 cursor-pointer"
         >
           <Navigation className="w-3.5 h-3.5 fill-current" />
-          <span>Open in Google Maps</span>
+          <span>Open in Google Maps & Photos</span>
           <ExternalLink className="w-3 h-3" />
         </button>
       </div>
