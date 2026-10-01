@@ -319,7 +319,7 @@ const CardInside: React.FC<{ onFlip: () => void }> = ({ onFlip }) => {
             filter: 'drop-shadow(0 1px 1px rgba(180, 140, 40, 0.2))',
           }}
         >
-          Hiketoli & Pulopu Wilson
+          Hiketoli & Wilson
         </h1>
 
         {/* Symmetrical Parents' Columns */}
@@ -581,7 +581,7 @@ const CardCover: React.FC<{ onFlip: () => void }> = ({ onFlip }) => {
             </span>
             
             <span className="font-script text-2xl sm:text-3xl text-amber-200/95 mt-1 tracking-wider drop-shadow">
-              Hiketoli & Pulopu
+              Hiketoli & Wilson
             </span>
           </div>
         </div>
