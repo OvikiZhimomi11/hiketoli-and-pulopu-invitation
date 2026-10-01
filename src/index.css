@@ -1,0 +1,136 @@
+@import "tailwindcss";
+
+@layer utilities {
+  .font-cinzel {
+    font-family: 'Cinzel', serif;
+  }
+  .font-cormorant {
+    font-family: 'Cormorant Garamond', Georgia, serif;
+  }
+  .font-script {
+    font-family: 'Alex Brush', cursive;
+  }
+  .font-pinyon {
+    font-family: 'Pinyon Script', cursive;
+  }
+  .font-sans-clean {
+    font-family: 'Plus Jakarta Sans', system-ui, sans-serif;
+  }
+  
+  .perspective-1000 {
+    perspective: 1000px;
+  }
+  .perspective-2000 {
+    perspective: 2000px;
+  }
+  .preserve-3d {
+    transform-style: preserve-3d;
+  }
+  .backface-hidden {
+    backface-visibility: hidden;
+  }
+  .rotate-y-180 {
+    transform: rotateY(180deg);
+  }
+  
+  /* Luxury Gold Foiling Gradient */
+  .text-gold-foil {
+    background: linear-gradient(135deg, #f7e096 0%, #d4af37 40%, #aa771c 70%, #ffd700 100%);
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+  }
+  .bg-gold-foil {
+    background: linear-gradient(135deg, #e3c473 0%, #cf9c34 50%, #996e1b 100%);
+  }
+  .border-gold-foil {
+    border-image: linear-gradient(to bottom right, #f2db94, #c99330, #7a540f) 1;
+  }
+}
+
+@keyframes floatPetalLeft {
+  0% {
+    transform: translateY(-80px) translateX(0) rotate(0deg) rotateX(0deg) rotateY(0deg);
+    opacity: 0;
+  }
+  10% {
+    opacity: 0.9;
+  }
+  50% {
+    transform: translateY(50vh) translateX(-45px) rotate(180deg) rotateX(60deg) rotateY(45deg);
+  }
+  85% {
+    opacity: 0.85;
+  }
+  100% {
+    transform: translateY(105vh) translateX(-80px) rotate(360deg) rotateX(120deg) rotateY(90deg);
+    opacity: 0;
+  }
+}
+
+@keyframes floatPetalRight {
+  0% {
+    transform: translateY(-80px) translateX(0) rotate(0deg) rotateX(0deg) rotateY(0deg);
+    opacity: 0;
+  }
+  10% {
+    opacity: 0.9;
+  }
+  50% {
+    transform: translateY(50vh) translateX(55px) rotate(160deg) rotateX(45deg) rotateY(70deg);
+  }
+  85% {
+    opacity: 0.85;
+  }
+  100% {
+    transform: translateY(105vh) translateX(95px) rotate(320deg) rotateX(90deg) rotateY(180deg);
+    opacity: 0;
+  }
+}
+
+@keyframes floatPetalTumble {
+  0% {
+    transform: translateY(-80px) translateX(0) rotate(0deg) rotateX(0deg);
+    opacity: 0;
+  }
+  15% {
+    opacity: 0.95;
+  }
+  40% {
+    transform: translateY(40vh) translateX(25px) rotate(90deg) rotateX(180deg);
+  }
+  75% {
+    transform: translateY(75vh) translateX(-20px) rotate(240deg) rotateX(270deg);
+  }
+  90% {
+    opacity: 0.85;
+  }
+  100% {
+    transform: translateY(105vh) translateX(40px) rotate(360deg) rotateX(360deg);
+    opacity: 0;
+  }
+}
+
+.animate-petal-left {
+  animation: floatPetalLeft linear infinite;
+}
+
+.animate-petal-right {
+  animation: floatPetalRight linear infinite;
+}
+
+.animate-petal-tumble {
+  animation: floatPetalTumble linear infinite;
+}
+
+@keyframes pulseGlow {
+  0%, 100% {
+    box-shadow: 0 0 15px rgba(212, 175, 55, 0.4), 0 0 30px rgba(212, 175, 55, 0.2);
+  }
+  50% {
+    box-shadow: 0 0 30px rgba(212, 175, 55, 0.7), 0 0 60px rgba(212, 175, 55, 0.4);
+  }
+}
+
+.animate-gold-glow {
+  animation: pulseGlow 2.5s infinite ease-in-out;
+}

@@ -1,0 +1,7 @@
+{
+  "name": "Hiketoli & Pulopu's Wedding Invitation & Cinematic Film",
+  "description": "An interactive cinematic wedding film and digital invitation card for Hiketoli and Pulopu Wilson.",
+  "requestFramePermissions": [],
+  "majorCapabilities": ["MAJOR_CAPABILITY_SERVER_SIDE_GEMINI_API"]
+}
+
