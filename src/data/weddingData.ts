@@ -1,8 +1,8 @@
 import { WeddingDetails, VideoScene, GuestBlessing } from '../types';
 
 export const weddingData: WeddingDetails = {
-  bride: 'Hiketoli',
-  groom: 'Pulopu Wilson',
+  bride: 'Hikety',
+  groom: 'Wilson',
   brideParents: {
     mother: 'Mrs. Kheshili T. Jimo',
     father: 'Late Er. K. Tosuho Sema',
@@ -32,7 +32,7 @@ export const weddingData: WeddingDetails = {
 export const videoScenes: VideoScene[] = [
   {
     id: 'intro',
-    title: 'Hiketoli & Pulopu Wilson',
+    title: 'Hikety & Wilson',
     subtitle: 'Together with their families',
     quote: '"May your constant love be with us, Lord, as we put our hope in you." · Psalm 33:22',
     image: '/src/assets/images/wedding_video_scene_couple_1790873111560.jpg',
@@ -53,7 +53,7 @@ export const initialBlessings: GuestBlessing[] = [
   {
     id: '1',
     name: 'Dr. & Mrs. Angke Konyak',
-    message: 'Warmest congratulations to dearest Hiketoli and Pulopu! May Almighty God shower your marriage with everlasting joy, peace, and abundance.',
+    message: 'Warmest congratulations to dearest Hikety and Wilson! May Almighty God shower your marriage with everlasting joy, peace, and abundance.',
     attendance: 'attending',
     timestamp: 'Just now',
   },
