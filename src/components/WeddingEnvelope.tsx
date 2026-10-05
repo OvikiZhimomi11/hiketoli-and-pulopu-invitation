@@ -167,7 +167,10 @@ export const WeddingEnvelope: React.FC<WeddingEnvelopeProps> = ({ onReset }) => 
             <CardCover onFlip={() => setActiveSide('inside')} />
           )}
           {activeSide === 'inside' && (
-            <CardInside onFlip={() => setActiveSide('cover')} />
+            <CardInside 
+              onFlip={() => setActiveSide('cover')} 
+              onOpenMap={() => setActiveSide('map')} 
+            />
           )}
           {activeSide === 'map' && <CardVenueMap />}
         </div>
@@ -179,16 +182,17 @@ export const WeddingEnvelope: React.FC<WeddingEnvelopeProps> = ({ onReset }) => 
 /**
  * PAGE 2: Exact Pixel-Faithful Wedding Card from User's Uploaded Image
  */
-const CardInside: React.FC<{ onFlip: () => void }> = ({ onFlip }) => {
+interface CardInsideProps {
+  onFlip: () => void;
+  onOpenMap: () => void;
+}
+
+const CardInside: React.FC<CardInsideProps> = ({ onFlip, onOpenMap }) => {
   return (
     <div
       onClick={onFlip}
-      className="cursor-pointer relative w-full aspect-[1/1.52] bg-[#fdfcf9] rounded-xl shadow-[0_20px_60px_rgba(0,0,0,0.65)] border border-[#d8cdb8] p-5 sm:p-7 flex flex-col items-center justify-between text-center select-none transition-transform hover:scale-[1.005] overflow-hidden"
+      className="cursor-pointer relative w-full aspect-[1/1.52] bg-white rounded-xl shadow-[0_20px_50px_rgba(0,0,0,0.55)] border border-neutral-200 p-5 sm:p-7 flex flex-col items-center justify-between text-center select-none transition-transform hover:scale-[1.005]"
     >
-      {/* Luxury Double Gold Hairline Inset */}
-      <div className="absolute inset-2 sm:inset-2.5 border border-[#d4af37]/35 rounded-lg pointer-events-none" />
-      <div className="absolute inset-3 sm:inset-3.5 border border-[#d4af37]/15 rounded-md pointer-events-none" />
-
       {/* SECTION 1: Top Monogram Wreath & Scripture */}
       <div className="relative z-10 flex flex-col items-center w-full pt-1">
         {/* Soft Slate Blue Floral Wreath with Gold H & P Monogram */}
@@ -389,18 +393,19 @@ const CardInside: React.FC<{ onFlip: () => void }> = ({ onFlip }) => {
         {/* Elegant Countdown Timer */}
         <WeddingCountdown />
 
-        {/* Clean Google Maps Direct Action Button */}
-        <a
-          href={GOOGLE_MAPS_DIRECTIONS_URL}
-          target="_blank"
-          rel="noopener noreferrer"
-          onClick={(e) => e.stopPropagation()}
-          className="my-1.5 px-4 py-1.5 rounded-full bg-[#0a2732] hover:bg-[#113a48] text-amber-200 border border-amber-400/40 shadow-sm transition-all hover:scale-105 active:scale-95 flex items-center gap-1.5 text-xs font-cinzel font-semibold cursor-pointer"
+        {/* Clean Google Maps Direct Action Button / Placeholder */}
+        <button
+          type="button"
+          onClick={(e) => {
+            e.stopPropagation();
+            onOpenMap();
+          }}
+          className="my-1.5 px-4 py-1.5 rounded-full bg-[#142e47] hover:bg-[#1a3a58] text-amber-200 border border-amber-400/50 shadow-sm transition-all hover:scale-105 active:scale-95 flex items-center gap-1.5 text-xs font-cinzel font-semibold cursor-pointer"
         >
           <MapPin className="w-3.5 h-3.5 text-amber-400" />
           <span>Open in Google Maps</span>
           <ExternalLink className="w-3 h-3 text-amber-300" />
-        </a>
+        </button>
 
         {/* Bottom Vintage Golden Flourish SVG */}
         <div className="w-36 sm:w-44 h-4 mt-0.5 flex items-center justify-center opacity-85">
