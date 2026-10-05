@@ -1,14 +1,14 @@
 import React, { useState, useEffect } from 'react';
-import { RotateCw, ArrowLeft, MapPin, ExternalLink, Navigation } from 'lucide-react';
+import { ArrowLeft, MapPin, ExternalLink, Navigation } from 'lucide-react';
 
 interface WeddingEnvelopeProps {
   onReset: () => void;
 }
 
 const GOOGLE_MAPS_EMBED_URL =
-  'https://maps.google.com/maps?q=Satakha+Town+Baptist+Church+Nagaland&t=&z=15&ie=UTF8&iwloc=&output=embed';
+  'https://www.google.com/maps/embed?pb=!1m14!1m8!1m3!1d57411.54054153899!2d94.445023!3d25.927958!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x3747cbbe1cc34565%3A0x6bad69a99a1ff912!2sSTBC!5e0!3m2!1sen!2sus!4v1791174011809!5m2!1sen!2sus';
 const GOOGLE_MAPS_DIRECTIONS_URL =
-  'https://www.google.com/maps/search/?api=1&query=Satakha+Town+Baptist+Church+Nagaland';
+  'https://www.google.com/maps/place/STBC/@25.927958,94.445023,15z/data=!4m6!3m5!1s0x3747cbbe1cc34565:0x6bad69a99a1ff912!8m2!3d25.927958!4d94.445023!16s%2Fg%2F11b6d0v_9_';
 
 /**
  * Elegant Countdown Timer to October 20, 2026, 10:00 A.M. using font-cinzel style
@@ -108,7 +108,8 @@ const WeddingCountdown: React.FC = () => {
 };
 
 export const WeddingEnvelope: React.FC<WeddingEnvelopeProps> = ({ onReset }) => {
-  const [activeSide, setActiveSide] = useState<'inside' | 'cover' | 'map'>('inside');
+  // Start with 'cover' first right after clicking "Open the card"
+  const [activeSide, setActiveSide] = useState<'inside' | 'cover' | 'map'>('cover');
 
   return (
     <div className="w-full max-w-2xl flex flex-col items-center justify-center animate-fade-in my-auto py-2">
@@ -123,6 +124,17 @@ export const WeddingEnvelope: React.FC<WeddingEnvelopeProps> = ({ onReset }) => 
         </button>
 
         <div className="flex items-center gap-1.5">
+          <button
+            onClick={() => setActiveSide('cover')}
+            className={`px-2.5 py-1 rounded-full text-xs font-cinzel transition-all cursor-pointer ${
+              activeSide === 'cover'
+                ? 'bg-amber-500/30 text-amber-200 border border-amber-400/40 font-semibold'
+                : 'text-neutral-400 hover:text-neutral-200'
+            }`}
+          >
+            Cover
+          </button>
+
           <button
             onClick={() => setActiveSide('inside')}
             className={`px-2.5 py-1 rounded-full text-xs font-cinzel transition-all cursor-pointer ${
@@ -145,54 +157,19 @@ export const WeddingEnvelope: React.FC<WeddingEnvelopeProps> = ({ onReset }) => 
             <MapPin className="w-3 h-3 text-amber-400" />
             <span>Google Map</span>
           </button>
-
-          <button
-            onClick={() => setActiveSide('cover')}
-            className={`px-2.5 py-1 rounded-full text-xs font-cinzel transition-all cursor-pointer ${
-              activeSide === 'cover'
-                ? 'bg-amber-500/30 text-amber-200 border border-amber-400/40 font-semibold'
-                : 'text-neutral-400 hover:text-neutral-200'
-            }`}
-          >
-            Cover
-          </button>
         </div>
       </div>
 
       {/* The Wedding Card Container */}
       <div className="w-full flex flex-col items-center justify-center">
         <div className="w-full max-w-[410px] sm:max-w-[430px]">
-          {activeSide === 'inside' && (
-            <CardInside onFlip={() => setActiveSide('cover')} />
-          )}
-          {activeSide === 'map' && (
-            <CardVenueMap onBackToCard={() => setActiveSide('inside')} />
-          )}
           {activeSide === 'cover' && (
             <CardCover onFlip={() => setActiveSide('inside')} />
           )}
-        </div>
-
-        {/* Quick Switch Prompt */}
-        <div className="mt-3 flex items-center justify-center gap-3 text-xs font-cinzel text-amber-300/80">
-          {activeSide !== 'inside' && (
-            <button
-              onClick={() => setActiveSide('inside')}
-              className="flex items-center gap-1 hover:text-amber-100 transition-colors cursor-pointer"
-            >
-              <RotateCw className="w-3 h-3" />
-              <span>View Invitation Card</span>
-            </button>
+          {activeSide === 'inside' && (
+            <CardInside onFlip={() => setActiveSide('cover')} />
           )}
-          {activeSide !== 'map' && (
-            <button
-              onClick={() => setActiveSide('map')}
-              className="flex items-center gap-1 hover:text-amber-100 transition-colors cursor-pointer"
-            >
-              <MapPin className="w-3 h-3 text-amber-400" />
-              <span>View Live Google Map</span>
-            </button>
-          )}
+          {activeSide === 'map' && <CardVenueMap />}
         </div>
       </div>
     </div>
@@ -206,18 +183,22 @@ const CardInside: React.FC<{ onFlip: () => void }> = ({ onFlip }) => {
   return (
     <div
       onClick={onFlip}
-      className="cursor-pointer relative w-full aspect-[1/1.52] bg-white rounded-xl shadow-[0_20px_50px_rgba(0,0,0,0.55)] border border-neutral-200 p-5 sm:p-7 flex flex-col items-center justify-between text-center select-none transition-transform hover:scale-[1.005]"
+      className="cursor-pointer relative w-full aspect-[1/1.52] bg-[#fdfcf9] rounded-xl shadow-[0_20px_60px_rgba(0,0,0,0.65)] border border-[#d8cdb8] p-5 sm:p-7 flex flex-col items-center justify-between text-center select-none transition-transform hover:scale-[1.005] overflow-hidden"
     >
+      {/* Luxury Double Gold Hairline Inset */}
+      <div className="absolute inset-2 sm:inset-2.5 border border-[#d4af37]/35 rounded-lg pointer-events-none" />
+      <div className="absolute inset-3 sm:inset-3.5 border border-[#d4af37]/15 rounded-md pointer-events-none" />
+
       {/* SECTION 1: Top Monogram Wreath & Scripture */}
-      <div className="flex flex-col items-center w-full pt-1">
+      <div className="relative z-10 flex flex-col items-center w-full pt-1">
         {/* Soft Slate Blue Floral Wreath with Gold H & P Monogram */}
         <div className="relative w-36 h-28 sm:w-40 sm:h-32 flex items-center justify-center">
           <svg viewBox="0 0 200 160" className="w-full h-full">
             <defs>
               <linearGradient id="goldHPMono" x1="0%" y1="0%" x2="100%" y2="100%">
-                <stop offset="0%" stopColor="#e3c267" />
-                <stop offset="40%" stopColor="#c59b27" />
-                <stop offset="100%" stopColor="#9a7314" />
+                <stop offset="0%" stopColor="#f3de98" />
+                <stop offset="50%" stopColor="#c59b27" />
+                <stop offset="100%" stopColor="#9b7218" />
               </linearGradient>
             </defs>
 
@@ -285,38 +266,38 @@ const CardInside: React.FC<{ onFlip: () => void }> = ({ onFlip }) => {
         {/* Bible Verse */}
         <div className="mt-1 px-3 text-[#1a365d] leading-tight">
           <p className="font-cormorant italic text-[12.5px] sm:text-[14px] leading-snug">
-            May your constant love be with us, Lord ,<br />
+            May your constant love be with us, Lord,<br />
             as we put our hope in you.
           </p>
-          <p className="font-cormorant italic font-semibold text-[11.5px] sm:text-[12.5px] mt-0.5">
+          <p className="font-cormorant italic font-semibold text-[11.5px] sm:text-[12.5px] mt-0.5 text-[#55758d]">
             Psalm 33:22
           </p>
         </div>
       </div>
 
       {/* SECTION 2: Announcement & Couple Name */}
-      <div className="flex flex-col items-center w-full my-auto px-2">
+      <div className="relative z-10 flex flex-col items-center w-full my-auto px-2">
         <p className="font-cormorant font-bold text-[#142e47] text-[13px] sm:text-[14.5px] tracking-wide">
           With the blessings of Almighty God and our families
         </p>
 
         {/* "We" with dividers */}
         <div className="flex items-center justify-center gap-3 my-1 w-full max-w-[200px]">
-          <span className="h-[1px] flex-1 bg-gradient-to-r from-transparent via-slate-300 to-slate-400" />
-          <span className="font-script text-3xl sm:text-4xl text-[#1f3a56] italic">
+          <span className="h-[1px] flex-1 bg-gradient-to-r from-transparent via-[#c59b27]/40 to-slate-400" />
+          <span className="font-script text-3xl sm:text-4xl text-[#142e47] italic">
             We
           </span>
-          <span className="h-[1px] flex-1 bg-gradient-to-l from-transparent via-slate-300 to-slate-400" />
+          <span className="h-[1px] flex-1 bg-gradient-to-l from-transparent via-[#c59b27]/40 to-slate-400" />
         </div>
 
         {/* Couple's Name in Golden Calligraphy */}
         <h1 
           className="font-script text-3xl sm:text-4xl md:text-[42px] leading-tight my-1 select-none"
           style={{
-            background: 'linear-gradient(135deg, #e4be5b 0%, #c4962e 45%, #9b7218 85%)',
+            background: 'linear-gradient(135deg, #f5df9a 0%, #c4962e 45%, #9b7218 85%)',
             WebkitBackgroundClip: 'text',
             WebkitTextFillColor: 'transparent',
-            filter: 'drop-shadow(0 1px 1px rgba(180, 140, 40, 0.2))',
+            filter: 'drop-shadow(0 1px 2px rgba(180, 140, 40, 0.25))',
           }}
         >
           Hikety & Wilson
@@ -325,14 +306,14 @@ const CardInside: React.FC<{ onFlip: () => void }> = ({ onFlip }) => {
         {/* Symmetrical Parents' Columns */}
         <div className="grid grid-cols-2 gap-3 w-full max-w-sm my-1.5 text-center text-[#142e47]">
           {/* Bride Parents Column */}
-          <div className="flex flex-col items-center border-r border-slate-300 pr-2">
+          <div className="flex flex-col items-center border-r border-[#c59b27]/30 pr-2">
             <span className="font-cormorant text-sm sm:text-base font-bold text-[#142e47]">
               D/o
             </span>
             <span className="font-cormorant text-xs sm:text-[13.5px] font-semibold text-[#142e47] leading-snug mt-0.5">
-              Mrs. KheshiliT. Jimo
+              Mrs. Kheshili T. Jimo
             </span>
-            <span className="font-cormorant text-xs sm:text-[13px] text-[#142e47] leading-none my-0.5">
+            <span className="font-cormorant text-xs sm:text-[13px] text-[#c59b27] leading-none my-0.5">
               &
             </span>
             <span className="font-cormorant text-xs sm:text-[13.5px] font-semibold text-[#142e47] leading-snug">
@@ -346,13 +327,13 @@ const CardInside: React.FC<{ onFlip: () => void }> = ({ onFlip }) => {
               S/o
             </span>
             <span className="font-cormorant text-xs sm:text-[13.5px] font-semibold text-[#142e47] leading-snug mt-0.5">
-              Late Mrs. KeluonguüHelena Khruomo
+              Late Mrs. Keluonguü Helena Khruomo
             </span>
-            <span className="font-cormorant text-xs sm:text-[13px] text-[#142e47] leading-none my-0.5">
+            <span className="font-cormorant text-xs sm:text-[13px] text-[#c59b27] leading-none my-0.5">
               &
             </span>
             <span className="font-cormorant text-xs sm:text-[13.5px] font-semibold text-[#142e47] leading-snug">
-              Late Mr. N.Kughavi Zhimomi
+              Late Mr. N. Kughavi Zhimomi
             </span>
           </div>
         </div>
@@ -365,9 +346,9 @@ const CardInside: React.FC<{ onFlip: () => void }> = ({ onFlip }) => {
       </div>
 
       {/* SECTION 3: Date, Time, Venue & Countdown */}
-      <div className="flex flex-col items-center w-full pb-1">
+      <div className="relative z-10 flex flex-col items-center w-full pb-1">
         {/* Month */}
-        <span className="font-cormorant text-xs sm:text-sm text-[#142e47]">
+        <span className="font-cormorant text-xs sm:text-sm text-[#142e47] tracking-wider uppercase font-semibold">
           October
         </span>
 
@@ -396,12 +377,12 @@ const CardInside: React.FC<{ onFlip: () => void }> = ({ onFlip }) => {
           </span>
         </div>
 
-        <span className="font-cormorant text-xs sm:text-sm text-[#142e47]">
+        <span className="font-cormorant text-xs sm:text-sm text-[#142e47] font-semibold tracking-wider">
           2026
         </span>
 
         {/* Church Venue */}
-        <h3 className="font-cormorant font-bold text-base sm:text-lg text-[#142e47] mt-1.5 tracking-wide">
+        <h3 className="font-cormorant font-bold text-base sm:text-lg text-[#142e47] mt-1 tracking-wide">
           Satakha Town Baptist Church
         </h3>
 
@@ -414,7 +395,7 @@ const CardInside: React.FC<{ onFlip: () => void }> = ({ onFlip }) => {
           target="_blank"
           rel="noopener noreferrer"
           onClick={(e) => e.stopPropagation()}
-          className="my-1.5 px-4 py-1.5 rounded-full bg-[#142e47] hover:bg-[#1a3a58] text-amber-200 border border-amber-400/50 shadow-sm transition-all hover:scale-105 active:scale-95 flex items-center gap-1.5 text-xs font-cinzel font-semibold cursor-pointer"
+          className="my-1.5 px-4 py-1.5 rounded-full bg-[#0a2732] hover:bg-[#113a48] text-amber-200 border border-amber-400/40 shadow-sm transition-all hover:scale-105 active:scale-95 flex items-center gap-1.5 text-xs font-cinzel font-semibold cursor-pointer"
         >
           <MapPin className="w-3.5 h-3.5 text-amber-400" />
           <span>Open in Google Maps</span>
@@ -422,7 +403,7 @@ const CardInside: React.FC<{ onFlip: () => void }> = ({ onFlip }) => {
         </a>
 
         {/* Bottom Vintage Golden Flourish SVG */}
-        <div className="w-36 sm:w-44 h-5 mt-0.5 flex items-center justify-center">
+        <div className="w-36 sm:w-44 h-4 mt-0.5 flex items-center justify-center opacity-85">
           <svg viewBox="0 0 180 32" className="w-full h-full text-[#c59b27]">
             <path
               d="M 20,16 C 40,6 60,26 80,16 C 85,13 90,19 95,16 C 115,26 135,6 160,16"
@@ -451,11 +432,15 @@ const CardInside: React.FC<{ onFlip: () => void }> = ({ onFlip }) => {
 /**
  * Dedicated Venue Card: Interactive Live Google Map View
  */
-const CardVenueMap: React.FC<{ onBackToCard: () => void }> = ({ onBackToCard }) => {
+const CardVenueMap: React.FC = () => {
   return (
-    <div className="relative w-full aspect-[1/1.52] bg-white rounded-xl shadow-[0_20px_50px_rgba(0,0,0,0.55)] border border-neutral-200 p-5 sm:p-6 flex flex-col items-center justify-between text-center select-none animate-fade-in">
+    <div className="relative w-full aspect-[1/1.52] bg-[#fdfcf9] rounded-xl shadow-[0_20px_60px_rgba(0,0,0,0.65)] border border-[#d8cdb8] p-5 sm:p-6 flex flex-col items-center justify-between text-center select-none animate-fade-in overflow-hidden">
+      {/* Luxury Double Gold Hairline Inset */}
+      <div className="absolute inset-2 sm:inset-2.5 border border-[#d4af37]/35 rounded-lg pointer-events-none" />
+      <div className="absolute inset-3 sm:inset-3.5 border border-[#d4af37]/15 rounded-md pointer-events-none" />
+
       {/* Top Header */}
-      <div className="flex flex-col items-center w-full pt-1">
+      <div className="relative z-10 flex flex-col items-center w-full pt-1">
         <span className="font-cinzel text-xs text-[#c59b27] tracking-[0.25em] uppercase font-semibold">
           Wedding Venue & Location
         </span>
@@ -467,43 +452,31 @@ const CardVenueMap: React.FC<{ onBackToCard: () => void }> = ({ onBackToCard }) 
         </p>
       </div>
 
-      {/* Live Interactive Google Map Embed (Zero image dependency, guaranteed to show in deployment) */}
-      <div className="relative w-full my-auto rounded-xl overflow-hidden border-2 border-[#c59b27]/60 shadow-inner bg-slate-100 aspect-[4/3]">
+      {/* Live Interactive Google Map Embed (Exact STBC place pin) */}
+      <div className="relative z-10 w-full my-auto rounded-xl overflow-hidden border-2 border-[#c59b27]/40 shadow-inner bg-slate-100 aspect-[4/3]">
         <iframe
-          title="Satakha Town Baptist Church Google Map"
+          title="Satakha Town Baptist Church (STBC) Google Map"
           src={GOOGLE_MAPS_EMBED_URL}
           className="w-full h-full border-0"
           loading="lazy"
           allowFullScreen
+          referrerPolicy="strict-origin-when-cross-origin"
         />
       </div>
 
-      {/* Location Details & Navigation Action */}
-      <div className="flex flex-col items-center w-full pb-1 space-y-2">
-        <p className="font-cormorant text-xs sm:text-sm text-[#142e47] leading-snug max-w-xs">
-          Coordinates: <span className="font-semibold">26.0125° N, 94.4856° E</span>
-          <br />
-          Ceremony begins at <span className="font-semibold">10:00 A.M.</span> on Tuesday, October 20, 2026.
-        </p>
-
+      {/* Navigation Action */}
+      <div className="relative z-10 flex flex-col items-center w-full pb-1">
         {/* Google Maps External Button */}
         <a
           href={GOOGLE_MAPS_DIRECTIONS_URL}
           target="_blank"
           rel="noopener noreferrer"
-          className="w-full max-w-[240px] py-2.5 px-4 rounded-full bg-gradient-to-r from-[#e8c76b] via-[#f7e096] to-[#cf9c34] text-neutral-950 font-cinzel font-bold text-xs tracking-wider uppercase shadow-md hover:shadow-lg hover:scale-102 active:scale-98 transition-all flex items-center justify-center gap-2 border border-amber-200 cursor-pointer"
+          className="w-full max-w-[240px] py-2.5 px-4 rounded-full bg-gradient-to-r from-[#e8c76b] via-[#faeaae] to-[#cf9c34] text-neutral-950 font-cinzel font-bold text-xs tracking-wider uppercase shadow-md hover:shadow-lg hover:scale-102 active:scale-98 transition-all flex items-center justify-center gap-2 border border-amber-200 cursor-pointer"
         >
           <Navigation className="w-3.5 h-3.5 fill-current" />
           <span>Get Directions</span>
           <ExternalLink className="w-3 h-3" />
         </a>
-
-        <button
-          onClick={onBackToCard}
-          className="text-xs font-cinzel text-neutral-500 hover:text-neutral-900 underline underline-offset-2 transition-colors cursor-pointer"
-        >
-          Return to Invitation Card
-        </button>
       </div>
     </div>
   );
@@ -566,24 +539,39 @@ const CardCover: React.FC<{ onFlip: () => void }> = ({ onFlip }) => {
                 <circle cx={leaf.cx} cy={leaf.cy} r={leaf.r * 1.5} fill="none" stroke="url(#goldGradCoverClean2)" strokeWidth="0.8" opacity="0.6" />
               </g>
             ))}
-          </svg>
 
-          {/* Monogram */}
-          <div className="absolute inset-0 flex flex-col items-center justify-center text-center">
-            <span className="font-script text-5xl sm:text-6xl text-gold-foil leading-none drop-shadow-md">
+            {/* Monogram Initials inside SVG: Eliminates HTML line-box and background-clip descender clipping */}
+            <text
+              x="150"
+              y="118"
+              textAnchor="middle"
+              fill="url(#goldGradCoverClean2)"
+              className="font-script"
+              style={{ fontSize: '76px', fontStyle: 'italic', fontWeight: 500 }}
+            >
               H
-            </span>
-            <span className="font-cormorant italic text-xl sm:text-2xl text-amber-200/90 leading-tight">
-              &
-            </span>
-            <span className="font-script text-5xl sm:text-6xl text-gold-foil leading-none drop-shadow-md">
+            </text>
+            <text
+              x="150"
+              y="152"
+              textAnchor="middle"
+              fill="url(#goldGradCoverClean2)"
+              className="font-cormorant"
+              style={{ fontSize: '26px', fontStyle: 'italic' }}
+            >
+              - & -
+            </text>
+            <text
+              x="150"
+              y="222"
+              textAnchor="middle"
+              fill="url(#goldGradCoverClean2)"
+              className="font-script"
+              style={{ fontSize: '76px', fontStyle: 'italic', fontWeight: 500 }}
+            >
               P
-            </span>
-            
-            <span className="font-script text-2xl sm:text-3xl text-amber-200/95 mt-1 tracking-wider drop-shadow">
-              Hikety & Wilson
-            </span>
-          </div>
+            </text>
+          </svg>
         </div>
 
         {/* Date */}
